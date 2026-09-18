@@ -63,14 +63,16 @@ export async function POST(req: NextRequest) {
     updatedAt: now,
   };
 
+  const trackData = Object.fromEntries(Object.entries(track).filter(([_, v]) => v !== undefined));
+
   await adminDb
     .collection('users')
     .doc(session.user.id)
     .collection('tracks')
     .doc(id)
-    .set(track);
+    .set(trackData);
 
-  return NextResponse.json({ id, ...track }, { status: 201 });
+  return NextResponse.json({ id, ...trackData }, { status: 201 });
 }
 
 // ── PATCH /api/tracks (bulk status update) ────────────────────────────────────

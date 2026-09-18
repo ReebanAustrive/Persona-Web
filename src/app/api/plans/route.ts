@@ -63,6 +63,8 @@ export async function POST(req: NextRequest) {
     updatedAt: now,
   };
 
+  const planData = Object.fromEntries(Object.entries(plan).filter(([_, v]) => v !== undefined));
+
   await adminDb
     .collection('users')
     .doc(session.user.id)
@@ -70,9 +72,9 @@ export async function POST(req: NextRequest) {
     .doc(trackId)
     .collection('plans')
     .doc(id)
-    .set({ ...plan, userId: session.user.id });
+    .set({ ...planData, userId: session.user.id });
 
-  return NextResponse.json({ id, ...plan }, { status: 201 });
+  return NextResponse.json({ id, ...planData }, { status: 201 });
 }
 
 // ── PATCH /api/plans ─────────────────────────────────────────────────────────

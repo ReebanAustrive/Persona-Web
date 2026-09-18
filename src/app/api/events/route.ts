@@ -62,14 +62,16 @@ export async function POST(req: NextRequest) {
     createdAt: now,
   };
 
+  const eventData = Object.fromEntries(Object.entries(event).filter(([_, v]) => v !== undefined));
+
   await adminDb
     .collection('users')
     .doc(session.user.id)
     .collection('events')
     .doc(id)
-    .set(event);
+    .set(eventData);
 
-  return NextResponse.json({ id, ...event }, { status: 201 });
+  return NextResponse.json({ id, ...eventData }, { status: 201 });
 }
 
 // ── DELETE /api/events?eventId=xxx ────────────────────────────────────────────

@@ -23,8 +23,9 @@ export async function GET() {
       achievements: [],
       weeklyConsistencyPct: 0,
     };
-    await docRef.set(newProfile);
-    return NextResponse.json(newProfile);
+    const profileData = Object.fromEntries(Object.entries(newProfile).filter(([_, v]) => v !== undefined));
+    await docRef.set(profileData);
+    return NextResponse.json(profileData);
   }
 
   return NextResponse.json({ id: snap.id, ...snap.data() });
